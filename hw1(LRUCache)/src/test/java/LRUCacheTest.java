@@ -1,7 +1,3 @@
-package hw1;
-
-import hw1.LRUCache;
-import hw1.LinkedHashMapLRUCache;
 import org.junit.*;
 
 import java.util.Optional;
