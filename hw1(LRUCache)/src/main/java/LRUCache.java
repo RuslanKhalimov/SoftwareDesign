@@ -33,6 +33,7 @@ public abstract class LRUCache<K, V> {
         Node cur = head;
         while (cur != null) {
             cur = cur.next;
+            res++;
         }
         return res;
     }
