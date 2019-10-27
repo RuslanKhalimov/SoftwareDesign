@@ -4,23 +4,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class LinkedHashMapLRUCache<T> extends LRUCache<T> {
-    private Map<Integer, Node> keyToNode = new HashMap<>();
+public class LinkedHashMapLRUCache<K, V> extends LRUCache<K, V> {
+    private Map<K, Node> keyToNode = new HashMap<>();
 
     public LinkedHashMapLRUCache(int capacity) {
         super(capacity);
     }
 
-    protected void doPut(int key, @NotNull  T value) {
+    protected void doPut(@NotNull K key, @NotNull V value) {
         removeNode(key);
         addNode(key, value);
     }
 
-    protected Optional<T> doGet(int key) {
+    protected Optional<V> doGet(@NotNull K key) {
         if (!keyToNode.containsKey(key)) {
             return Optional.empty();
         }
-        T res = keyToNode.get(key).value;
+        V res = keyToNode.get(key).value;
         removeNode(key);
         addNode(key, res);
         return Optional.of(res);
@@ -31,7 +31,7 @@ public class LinkedHashMapLRUCache<T> extends LRUCache<T> {
         return keyToNode.size();
     }
 
-    private void removeNode(int key) {
+    private void removeNode(@NotNull K key) {
         if (!keyToNode.containsKey(key)) {
             return;
         }
@@ -49,7 +49,7 @@ public class LinkedHashMapLRUCache<T> extends LRUCache<T> {
         keyToNode.remove(key);
     }
 
-    private void addNode(int key, @NotNull T value) {
+    private void addNode(@NotNull K key, @NotNull V value) {
         Node newNode = new Node(key, value);
         newNode.next = head;
         if (head != null) {

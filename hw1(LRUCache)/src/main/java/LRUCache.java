@@ -2,7 +2,7 @@ import com.sun.istack.internal.NotNull;
 
 import java.util.Optional;
 
-public abstract class LRUCache<T> {
+public abstract class LRUCache<K, V> {
     protected final int capacity;
     protected Node head = null, tail = null;
 
@@ -10,7 +10,8 @@ public abstract class LRUCache<T> {
         this.capacity = capacity;
     }
 
-    public void put(int key, @NotNull T value) {
+    public void put(@NotNull K key, @NotNull V value) {
+        assert key != null : "key can't be null";
         assert value != null : "value can't be null";
         doPut(key, value);
         assert head != null && tail != null : "value not inserted";
@@ -18,9 +19,10 @@ public abstract class LRUCache<T> {
         assert size() <= capacity : "too big size";
     }
 
-    public Optional<T> get(int key) {
+    public Optional<V> get(@NotNull K key) {
+        assert key != null : "key can't be null";
         int oldSize = size();
-        Optional<T> res = doGet(key);
+        Optional<V> res = doGet(key);
         assert (!res.isPresent() || head.value == res.get()) : "value not pushed";
         assert oldSize == size() : "size changed";
         return res;
@@ -35,15 +37,15 @@ public abstract class LRUCache<T> {
         return res;
     }
 
-    protected abstract void doPut(int key, @NotNull T value);
-    protected abstract Optional<T> doGet(int key);
+    protected abstract void doPut(@NotNull K key, @NotNull V value);
+    protected abstract Optional<V> doGet(@NotNull K key);
 
     protected class Node {
-        final int key;
-        @NotNull final T value;
+        @NotNull final K key;
+        @NotNull final V value;
         Node prev, next;
 
-        Node(int key, T value) {
+        Node(@NotNull K key, @NotNull V value) {
             this.key = key;
             this.value = value;
         }
