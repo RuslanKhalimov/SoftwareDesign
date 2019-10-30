@@ -1,0 +1,39 @@
+{
+  "response": {
+    "items": [
+      {
+        "id": 1708,
+        "date": 1572449412,
+        "owner_id": -184783437,
+        "from_id": -184783437,
+        "post_type": "post",
+        "text": "Luar biasa king leo, kami salut, bangga dan bahagia, sukses selalu , from indonesia",
+        "marked_as_ads": 0,
+        "post_source": {
+          "type": "rss"
+        },
+        "comments": {
+          "count": 0,
+          "can_post": 1,
+          "groups_can_post": true
+        },
+        "likes": {
+          "count": 0,
+          "user_likes": 0,
+          "can_like": 1,
+          "can_publish": 1
+        },
+        "reposts": {
+          "count": 0,
+          "user_reposted": 0
+        },
+        "views": {
+          "count": 5
+        }
+      }
+    ],
+    "count": 1,
+    "total_count": 2,
+    "next_from": "30/-184783437_1583"
+  }
+}
