@@ -15,15 +15,12 @@ public class ResponseParser {
         return new Gson().fromJson(response, JsonObject.class).getAsJsonObject("response");
     }
 
-    public List<VkNewsFeed> parseNewsFeeds(JsonArray items) {
+    public List<VkNewsFeed> parseNewsFeeds(JsonObject responseJson) {
+        JsonArray items = responseJson.getAsJsonArray("items");
         List<VkNewsFeed> newsFeeds = new ArrayList<>();
         items.forEach(jsonElement -> newsFeeds.add(parseNewsFeed(jsonElement.getAsJsonObject())));
 
         return newsFeeds;
-    }
-
-    public JsonArray getItems(JsonObject responseJson) {
-        return responseJson.getAsJsonArray("items");
     }
 
     public String getStartFrom(JsonObject responseJson) {

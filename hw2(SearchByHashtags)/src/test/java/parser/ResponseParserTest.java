@@ -2,7 +2,6 @@ package parser;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.junit.Test;
 import utils.TestWithResources;
@@ -61,9 +60,7 @@ public class ResponseParserTest extends TestWithResources {
 
     private List<VkNewsFeed> parseNewsFeedsFromFile(String fileName) throws Exception {
         JsonObject responseJson = parseResponseFromFile(fileName);
-        JsonArray items = parser.getItems(responseJson);
-
-        return parser.parseNewsFeeds(items);
+        return parser.parseNewsFeeds(responseJson);
     }
 
 }

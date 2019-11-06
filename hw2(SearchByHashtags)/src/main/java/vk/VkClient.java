@@ -1,6 +1,5 @@
 package vk;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import http.URLBuilder;
 import http.URLReader;
@@ -32,10 +31,9 @@ public class VkClient {
             String response = urlReader.readAsText(url);
 
             JsonObject responseJson = responseParser.parseResponse(response);
-            JsonArray items = responseParser.getItems(responseJson);
             startFrom = responseParser.getStartFrom(responseJson);
 
-            newsFeeds.addAll(responseParser.parseNewsFeeds(items));
+            newsFeeds.addAll(responseParser.parseNewsFeeds(responseJson));
         }
         return newsFeeds;
     }
