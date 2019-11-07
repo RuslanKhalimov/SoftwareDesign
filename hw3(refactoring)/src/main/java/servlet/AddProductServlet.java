@@ -3,35 +3,25 @@ package servlet;
 import dao.ProductDao;
 import product.Product;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * @author akirakozov
  */
-public class AddProductServlet extends HttpServlet {
-
-    private final ProductDao productDao;
+public class AddProductServlet extends AbstractProductServlet {
 
     public AddProductServlet(ProductDao productDao) {
-        this.productDao = productDao;
+        super(productDao);
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String name = request.getParameter("name");
         long price = Long.parseLong(request.getParameter("price"));
 
-        try {
-            productDao.insert(new Product(name, price));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        productDao.insert(new Product(name, price));
 
-        response.setContentType("text/html");
-        response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().println("OK");
     }
 
