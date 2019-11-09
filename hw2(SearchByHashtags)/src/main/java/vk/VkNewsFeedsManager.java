@@ -16,9 +16,9 @@ public class VkNewsFeedsManager {
             throw new IllegalArgumentException("time interval should be from 0 to 24");
         }
 
+        long currentTime = TimeUtils.getCurrentTimeInSeconds();
         List<VkNewsFeed> newsFeeds = client.getNewsFeeds(hashTagText, timeInterval);
 
-        long currentTime = TimeUtils.getCurrentTimeInSeconds();
         int result[] = new int[timeInterval];
         for (VkNewsFeed newsFeed : newsFeeds) {
             int index = (int) ((currentTime - newsFeed.getDate().getTime()) / TimeUtils.SECONDS_IN_HOUR);
