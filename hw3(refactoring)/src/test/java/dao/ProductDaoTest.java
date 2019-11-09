@@ -1,7 +1,7 @@
 package dao;
 
 import org.junit.After;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 import product.Product;
 
@@ -20,7 +20,7 @@ public class ProductDaoTest {
 
     private ProductDao productDao;
 
-    @BeforeClass
+    @Before
     public void setUp() throws SQLException {
         PRODUCTS_EXAMPLE = Arrays.asList(
                 new Product("product1", 100),
