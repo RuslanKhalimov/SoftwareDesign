@@ -20,20 +20,21 @@ public class VkClient {
 
     public List<VkNewsFeed> getNewsFeeds(String hashTagText, long timeInterval) {
         List<VkNewsFeed> newsFeeds = new ArrayList<>();
-        String startFrom = null;
-        while (startFrom == null || !startFrom.equals("")) {
-            String url = new URLBuilder()
-                    .setHashTagText(hashTagText)
-                    .setStartTime(TimeUtils.getPastTimeInSeconds(timeInterval))
-                    .setStartFrom(startFrom)
-                    .build();
+        URLBuilder urlBuilder = new URLBuilder()
+                .setHashTagText(hashTagText)
+                .setStartTime(TimeUtils.getPastTimeInSeconds(timeInterval))
+                .setEndTime(TimeUtils.getCurrentTimeInSeconds());
 
-            String response = urlReader.readAsText(url);
+        while (true) {
+            String response = urlReader.readAsText(urlBuilder.build());
 
             JsonObject responseJson = responseParser.parseResponse(response);
-            startFrom = responseParser.getStartFrom(responseJson);
-
             newsFeeds.addAll(responseParser.parseNewsFeeds(responseJson));
+
+            String startFrom = responseParser.getStartFrom(responseJson);
+            if (startFrom.isEmpty())
+                break;
+            urlBuilder.setStartFrom(startFrom);
         }
         return newsFeeds;
     }
