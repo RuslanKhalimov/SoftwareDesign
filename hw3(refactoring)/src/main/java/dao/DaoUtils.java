@@ -13,15 +13,20 @@ public class DaoUtils {
     }
 
     public static void createTables() throws SQLException {
-        try (Connection c = getConnection()) {
+        try (Statement stmt = getConnection().createStatement()) {
             String sql = "CREATE TABLE IF NOT EXISTS PRODUCT" +
                     "(ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                     " NAME           TEXT    NOT NULL, " +
                     " PRICE          INT     NOT NULL)";
-            Statement stmt = c.createStatement();
 
             stmt.executeUpdate(sql);
-            stmt.close();
+        }
+    }
+
+    public static void cleanTables() throws SQLException {
+        try (Statement stmt = getConnection().createStatement()) {
+            String sql = "DELETE FROM PRODUCT";
+            stmt.executeUpdate(sql);
         }
     }
 
