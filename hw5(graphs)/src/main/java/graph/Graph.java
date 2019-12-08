@@ -4,7 +4,6 @@ import drawing.DrawingApi;
 import drawing.Point;
 
 import java.io.*;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,9 +12,6 @@ import java.util.*;
 import static drawing.DrawingUtils.VERTEX_RADIUS;
 
 public abstract class Graph {
-    /**
-     * Bridge to drawing api
-     */
     private final DrawingApi drawingApi;
     private final Map<Vertex, Point> drawnVertices = new HashMap<>();
     private final Set<Edge> drawnEdges = new HashSet<>();

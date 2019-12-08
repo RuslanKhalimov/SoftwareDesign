@@ -6,14 +6,12 @@ import drawing.Point;
 import static drawing.DrawingUtils.MARGIN;
 
 public class PointsFactory {
-    private final int pointsCount;
     private double nextAlpha;
     private final double dAlpha;
     private final Point center;
     private final double radius;
 
     public PointsFactory(int pointsCount, DrawingApi drawingApi) {
-        this.pointsCount = pointsCount;
         nextAlpha = 0;
 
         dAlpha = 2 * Math.PI / pointsCount;
