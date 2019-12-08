@@ -20,7 +20,7 @@ public class CalcVisitor implements TokenVisitor {
         tokens.forEach(token -> token.accept(this));
 
         if (stack.size() != 1) {
-            throw new RuntimeException("Invalid tokens sequence");
+            throw new IllegalStateException("Invalid tokens sequence");
         }
 
         return stack.pollLast();
@@ -39,7 +39,7 @@ public class CalcVisitor implements TokenVisitor {
     @Override
     public void visit(OperationToken token) {
         if (stack.size() < 2) {
-            throw new IllegalArgumentException();
+            throw new IllegalStateException();
         }
         int b = stack.pollLast();
         int a = stack.pollLast();
