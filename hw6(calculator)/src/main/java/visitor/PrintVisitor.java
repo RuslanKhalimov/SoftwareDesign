@@ -5,7 +5,6 @@ import token.NumberToken;
 import token.OperationToken;
 import token.Token;
 
-import java.io.UncheckedIOException;
 import java.util.List;
 
 public class PrintVisitor implements TokenVisitor {
