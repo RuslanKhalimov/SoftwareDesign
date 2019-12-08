@@ -9,6 +9,9 @@ public class PointsFactory {
     private final double radius;
 
     public PointsFactory(int pointsCount, Point center, double radius) {
+        if (pointsCount == 0) {
+            throw new IllegalArgumentException("Empty graph");
+        }
         this.center = center;
         this.radius = radius;
         nextAlpha = 0;

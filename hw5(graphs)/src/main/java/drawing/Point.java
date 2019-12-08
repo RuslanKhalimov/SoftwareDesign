@@ -24,8 +24,9 @@ public class Point {
         if (this == other) return true;
         if (!(other instanceof Point)) return false;
         Point point = (Point) other;
-        return Objects.equals(x, point.x) &&
-                Objects.equals(y, point.y);
+        double EPS = 1e-10;
+        return Math.abs(x - point.x) < EPS &&
+                Math.abs(y - point.y) < EPS;
     }
 
     @Override
