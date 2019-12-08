@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static drawing.DrawingUtils.MARGIN;
 import static drawing.DrawingUtils.VERTEX_RADIUS;
 
 public abstract class Graph {
@@ -22,7 +23,16 @@ public abstract class Graph {
     }
 
     public void drawGraph() {
-        pointsFactory = new PointsFactory(getGraphSize(), drawingApi);
+        Point center = new Point(
+                drawingApi.getDrawingAreaWidth() / 2.0,
+                drawingApi.getDrawingAreaHeight() / 2.0
+        );
+        double radius = Math.min(
+                drawingApi.getDrawingAreaWidth(),
+                drawingApi.getDrawingAreaHeight()
+        ) / 2.0 - MARGIN;
+
+        pointsFactory = new PointsFactory(getGraphSize(), center, radius);
 
         doDrawGraph();
         drawingApi.visualize();
