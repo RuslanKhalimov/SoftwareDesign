@@ -23,12 +23,15 @@ public class EdgesListGraph extends Graph {
         edges = reader.lines()
                 .map(String::trim)
                 .filter(line -> !line.isEmpty())
-                .map(line -> line.split(" "))
-                .map(line -> Arrays.stream(line)
-                        .mapToInt(Integer::parseInt)
-                        .mapToObj(Vertex::new)
+                .map(line -> Arrays.stream(line.split("\\s"))
+                        .map(x -> new Vertex(Integer.parseInt(x)))
                         .collect(Collectors.toList()))
-                .map(list -> new Edge(list.get(0), list.get(1)))
+                .map(list -> {
+                    if (list.size() != 2) {
+                        throw new IllegalArgumentException("Incorrect input");
+                    }
+                    return new Edge(list.get(0), list.get(1));
+                })
                 .collect(Collectors.toList());
     }
 
