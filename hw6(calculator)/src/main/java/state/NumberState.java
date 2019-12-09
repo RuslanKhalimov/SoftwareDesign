@@ -4,8 +4,6 @@ import token.NumberToken;
 import token.Token;
 import token.Tokenizer;
 
-import java.text.ParseException;
-
 public class NumberState implements State {
     @Override
     public Token createToken(Tokenizer tokenizer) {
@@ -18,7 +16,7 @@ public class NumberState implements State {
     }
 
     @Override
-    public void setNextState(Tokenizer tokenizer) throws ParseException {
+    public void setNextState(Tokenizer tokenizer) {
         if (tokenizer.isEndOfInput()) {
             tokenizer.setState(new EndState());
         } else if (tokenizer.isOperation()) {
@@ -26,7 +24,7 @@ public class NumberState implements State {
         } else if (tokenizer.isRightBrace()) {
             tokenizer.setState(new RightBraceState());
         } else {
-            throw new ParseException("Unexpected character : " + tokenizer.getCurrentCharacter(), tokenizer.getCurIndex());
+            tokenizer.setState(new ErrorState("Unexpected symbol : " + tokenizer.getCurrentCharacter()));
         }
     }
 

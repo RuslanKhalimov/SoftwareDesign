@@ -2,8 +2,6 @@ package state;
 
 import token.*;
 
-import java.text.ParseException;
-
 public class StartState implements State {
     @Override
     public Token createToken(Tokenizer tokenizer) {
@@ -11,7 +9,7 @@ public class StartState implements State {
     }
 
     @Override
-    public void setNextState(Tokenizer tokenizer) throws ParseException {
+    public void setNextState(Tokenizer tokenizer) {
         if (tokenizer.isEndOfInput()) {
             tokenizer.setState(new EndState());
         } else if (tokenizer.isNumber()) {
@@ -19,7 +17,7 @@ public class StartState implements State {
         } else if (tokenizer.isLeftBrace()) {
             tokenizer.setState(new LeftBraceState());
         } else {
-            throw new ParseException("Unexpected character : " + tokenizer.getCurrentCharacter(), tokenizer.getCurIndex());
+            tokenizer.setState(new ErrorState("Unexpected character : " + tokenizer.getCurrentCharacter()));
         }
     }
 

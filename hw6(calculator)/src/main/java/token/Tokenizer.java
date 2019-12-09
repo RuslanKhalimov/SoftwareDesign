@@ -18,12 +18,16 @@ public class Tokenizer {
         state.setNextState(this);
         List<Token> result = new ArrayList<>();
 
-        while (!(state instanceof EndState)) {
+        while (!(state instanceof EndState) && !(state instanceof ErrorState)) {
             result.add(state.createToken(this));
             while (!isEndOfInput() && isWhiteSpace()) {
                 nextCharacter();
             }
             state.setNextState(this);
+        }
+
+        if (state instanceof ErrorState) {
+            throw new ParseException(((ErrorState)state).getMessage(), 0);
         }
 
         return result;

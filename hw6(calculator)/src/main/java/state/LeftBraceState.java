@@ -5,8 +5,6 @@ import token.Token;
 import token.TokenType;
 import token.Tokenizer;
 
-import java.text.ParseException;
-
 public class LeftBraceState implements State {
     @Override
     public Token createToken(Tokenizer tokenizer) {
@@ -15,15 +13,15 @@ public class LeftBraceState implements State {
     }
 
     @Override
-    public void setNextState(Tokenizer tokenizer) throws ParseException {
+    public void setNextState(Tokenizer tokenizer) {
         if (tokenizer.isEndOfInput()) {
-            throw new ParseException("Unexpected end of input", -1);
+            tokenizer.setState(new ErrorState("Unexpected end of input"));
         } else if (tokenizer.isLeftBrace()) {
             tokenizer.setState(this);
         } else if (tokenizer.isNumber()) {
             tokenizer.setState(new NumberState());
         } else {
-            throw new ParseException("Unexpected character : " + tokenizer.getCurrentCharacter(), tokenizer.getCurIndex());
+            tokenizer.setState(new ErrorState("Unexpected character : " + tokenizer.getCurrentCharacter()));
         }
     }
 
