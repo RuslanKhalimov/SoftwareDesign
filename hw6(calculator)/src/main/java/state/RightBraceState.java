@@ -1,20 +1,17 @@
 package state;
 
-import token.NumberToken;
+import token.BraceToken;
 import token.Token;
+import token.TokenType;
 import token.Tokenizer;
 
 import java.text.ParseException;
 
-public class NumberState implements State {
+public class RightBraceState implements State {
     @Override
     public Token createToken(Tokenizer tokenizer) {
-        StringBuilder value = new StringBuilder();
-        while (!tokenizer.isEndOfInput() && Character.isDigit(tokenizer.getCurrentCharacter())) {
-            value.append(tokenizer.getCurrentCharacter());
-            tokenizer.nextCharacter();
-        }
-        return new NumberToken(Integer.parseInt(value.toString()));
+        tokenizer.nextCharacter();
+        return new BraceToken(TokenType.RIGHT_BRACE);
     }
 
     @Override
@@ -24,7 +21,7 @@ public class NumberState implements State {
         } else if (tokenizer.isOperation()) {
             tokenizer.setState(new OperationState());
         } else if (tokenizer.isRightBrace()) {
-            tokenizer.setState(new RightBraceState());
+            tokenizer.setState(this);
         } else {
             throw new ParseException("Unexpected character : " + tokenizer.getCurrentCharacter(), tokenizer.getCurIndex());
         }

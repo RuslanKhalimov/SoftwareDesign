@@ -3,13 +3,12 @@ package state;
 import token.Token;
 import token.Tokenizer;
 
-public abstract class State {
-    protected final Tokenizer tokenizer;
+import java.text.ParseException;
 
-    protected State(Tokenizer tokenizer) {
-        this.tokenizer = tokenizer;
-    }
+public interface State {
 
-    public abstract Token createToken();
+    Token createToken(Tokenizer tokenizer);
+
+    void setNextState(Tokenizer tokenizer) throws ParseException;
 
 }

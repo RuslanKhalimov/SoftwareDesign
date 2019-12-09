@@ -9,32 +9,28 @@ import java.util.List;
 public class Tokenizer {
     private String input;
     private int curIndex;
+    private State state;
 
     public List<Token> parse(String input) throws ParseException {
-        this.input = input;
+        this.input = input.trim();
         curIndex = 0;
-        State curState;
+        state = new StartState();
+        state.setNextState(this);
         List<Token> result = new ArrayList<>();
 
-        while (!isEndOfInput()) {
-            if (isWhiteSpace()) {
+        while (!(state instanceof EndState)) {
+            result.add(state.createToken(this));
+            while (!isEndOfInput() && isWhiteSpace()) {
                 nextCharacter();
-                continue;
             }
-            if (isBrace()) {
-                curState = new BraceState(this);
-            } else if (isNumber()) {
-                curState = new NumberState(this);
-            } else if (isOperationOrBrace()) {
-                curState = new OperationState(this);
-            } else {
-                throw new ParseException("Unexpected symbol '" + getCurrentCharacter() + "'", curIndex);
-            }
-
-            result.add(curState.createToken());
+            state.setNextState(this);
         }
 
         return result;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 
     public boolean isEndOfInput() {
@@ -45,16 +41,19 @@ public class Tokenizer {
         return Character.isWhitespace(getCurrentCharacter());
     }
 
-    private boolean isBrace() {
-        String availableSymbols = "()";
-        return availableSymbols.indexOf(getCurrentCharacter()) >= 0;
-    }
-
-    private boolean isNumber() {
+    public boolean isNumber() {
         return Character.isDigit(getCurrentCharacter());
     }
 
-    private boolean isOperationOrBrace() {
+    public boolean isLeftBrace() {
+        return getCurrentCharacter() == '(';
+    }
+
+    public boolean isRightBrace() {
+        return getCurrentCharacter() == ')';
+    }
+
+    public boolean isOperation() {
         String availableSymbols = "+-*/";
         return availableSymbols.indexOf(getCurrentCharacter()) >= 0;
     }
@@ -65,6 +64,10 @@ public class Tokenizer {
 
     public void nextCharacter() {
         curIndex++;
+    }
+
+    public int getCurIndex() {
+        return curIndex;
     }
 
 }
