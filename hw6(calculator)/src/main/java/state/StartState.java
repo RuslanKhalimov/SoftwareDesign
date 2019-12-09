@@ -5,7 +5,24 @@ import token.*;
 public class StartState implements State {
     @Override
     public Token createToken(Tokenizer tokenizer) {
-        throw new UnsupportedOperationException();
+        char c = tokenizer.getCurrentCharacter();
+        tokenizer.nextCharacter();
+        switch (c) {
+            case '(':
+                return new BraceToken(TokenType.LEFT_BRACE);
+            case ')':
+                return new BraceToken(TokenType.RIGHT_BRACE);
+            case '+':
+                return new OperationToken(TokenType.PLUS);
+            case '-':
+                return new OperationToken(TokenType.MINUS);
+            case '*':
+                return new OperationToken(TokenType.MUL);
+            case '/':
+                return new OperationToken(TokenType.DIV);
+            default:
+                return null;
+        }
     }
 
     @Override
@@ -14,8 +31,8 @@ public class StartState implements State {
             tokenizer.setState(new EndState());
         } else if (tokenizer.isNumber()) {
             tokenizer.setState(new NumberState());
-        } else if (tokenizer.isLeftBrace()) {
-            tokenizer.setState(new LeftBraceState());
+        } else if (tokenizer.isOperationOrBrace()) {
+            tokenizer.setState(new StartState());
         } else {
             tokenizer.setState(new ErrorState("Unexpected character : " + tokenizer.getCurrentCharacter()));
         }

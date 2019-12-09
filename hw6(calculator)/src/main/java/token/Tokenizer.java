@@ -49,16 +49,8 @@ public class Tokenizer {
         return Character.isDigit(getCurrentCharacter());
     }
 
-    public boolean isLeftBrace() {
-        return getCurrentCharacter() == '(';
-    }
-
-    public boolean isRightBrace() {
-        return getCurrentCharacter() == ')';
-    }
-
-    public boolean isOperation() {
-        String availableSymbols = "+-*/";
+    public boolean isOperationOrBrace() {
+        String availableSymbols = "+-*/()";
         return availableSymbols.indexOf(getCurrentCharacter()) >= 0;
     }
 
@@ -68,10 +60,6 @@ public class Tokenizer {
 
     public void nextCharacter() {
         curIndex++;
-    }
-
-    public int getCurIndex() {
-        return curIndex;
     }
 
 }

@@ -19,13 +19,10 @@ public class NumberState implements State {
     public void setNextState(Tokenizer tokenizer) {
         if (tokenizer.isEndOfInput()) {
             tokenizer.setState(new EndState());
-        } else if (tokenizer.isOperation()) {
-            tokenizer.setState(new OperationState());
-        } else if (tokenizer.isRightBrace()) {
-            tokenizer.setState(new RightBraceState());
+        } else if (tokenizer.isOperationOrBrace()) {
+            tokenizer.setState(new StartState());
         } else {
             tokenizer.setState(new ErrorState("Unexpected symbol : " + tokenizer.getCurrentCharacter()));
         }
     }
-
 }

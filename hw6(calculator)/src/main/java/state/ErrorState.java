@@ -10,6 +10,10 @@ public class ErrorState implements State {
         this.message = message;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
     @Override
     public Token createToken(Tokenizer tokenizer) {
         throw new UnsupportedOperationException();
@@ -18,9 +22,5 @@ public class ErrorState implements State {
     @Override
     public void setNextState(Tokenizer tokenizer) {
         throw new UnsupportedOperationException();
-    }
-
-    public String getMessage() {
-        return message;
     }
 }
