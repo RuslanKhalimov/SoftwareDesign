@@ -1,0 +1,63 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head>
+    <title>todo list</title>
+</head>
+<body>
+
+<form th:object="${new_todo_list}" method="POST" action="/add-todo-list">
+    <table>
+        <tr>
+            <td><label>Name </label></td>
+            <td><input type="text" th:field="*{name}"/></td>
+        </tr>
+    </table>
+
+    <input type="submit" value="Add todo list"/>
+</form>
+
+<ul th:each="todo_list : ${todo_lists}">
+    <li>
+        <a th:text="${todo_list.name}"/>
+
+        <form method="POST" action="/remove-todo-list">
+            <input type="hidden" name="list_id" th:value="${todo_list.id}"/>
+            <input type="submit" value="Remove todo list"/>
+        </form>
+
+        <form th:object="${todo}" method="POST" action="/add-todo">
+            <table>
+                <tr>
+                    <td><label>Name </label></td>
+                    <td><input type="text" th:field="*{name}"/></td>
+                </tr>
+                <tr>
+                    <td><label>Description </label></td>
+                    <td><input type="text" th:field="*{description}"/></td>
+                </tr>
+            </table>
+
+            <input type="hidden" name="list_id" th:value="${todo_list.id}">
+            <input type="submit" value="Add todo"/>
+        </form>
+
+        <table border="1">
+            <th:block th:each="todo : ${todo_list.getTodoList()}">
+                <tr>
+                    <td th:text="${todo.name}"/>
+                    <td th:text="${todo.description}"/>
+                    <td th:text="${todo.isDone()}"/>
+                    <td>
+                        <form method="POST" action="/change-todo-status">
+                            <input type="hidden" name="todo_id" th:value="${todo.id}"/>
+                            <input type="submit" value="Change status"/>
+                        </form>
+                    </td>
+                </tr>
+            </th:block>
+        </table>
+    </li>
+</ul>
+
+</body>
+</html>
