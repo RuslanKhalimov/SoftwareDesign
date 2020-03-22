@@ -41,7 +41,6 @@ public class MongoReactiveDao implements ReactiveDao {
 
     @Override
     public rx.Observable<User> getUsers() {
-        users.find().toObservable().subscribe(System.out::println);
         return users
                 .find()
                 .toObservable()
