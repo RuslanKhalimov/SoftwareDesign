@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>software-design</groupId>
-    <artifactId>hw10(reactive)</artifactId>
+    <artifactId>reactive</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
