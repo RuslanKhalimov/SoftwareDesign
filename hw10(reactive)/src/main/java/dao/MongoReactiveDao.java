@@ -1,5 +1,6 @@
 package dao;
 
+import com.mongodb.client.model.Filters;
 import com.mongodb.rx.client.MongoCollection;
 import model.Currency;
 import model.Product;
@@ -29,9 +30,8 @@ public class MongoReactiveDao implements ReactiveDao {
     @Override
     public Observable<Product> getProductsForUser(long userId) {
         return users
-                .find()
+                .find(Filters.eq("id", userId))
                 .toObservable()
-                .filter(doc -> doc.getLong("id") == userId)
                 .map(doc -> Currency.valueOf(doc.getString("currency")))
                 .flatMap(userCurrency -> products
                         .find()
@@ -49,9 +49,8 @@ public class MongoReactiveDao implements ReactiveDao {
 
     private Observable<Boolean> insertToCollection(Document document, MongoCollection<Document> collection) {
         return collection
-                .find()
+                .find(Filters.eq("id", document.getLong("id")))
                 .toObservable()
-                .filter(foundDoc -> document.getLong("id").equals(foundDoc.getLong("id")))
                 .singleOrDefault(null)
                 .flatMap(foundDoc -> {
                     if (foundDoc == null) {
