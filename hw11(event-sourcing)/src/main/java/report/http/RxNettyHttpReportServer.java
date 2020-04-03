@@ -15,7 +15,6 @@ public class RxNettyHttpReportServer implements ReportHttpServer {
 
     @Override
     public <T> Observable<String> getResponse(HttpServerRequest<T> request) {
-        System.out.println(request.toString());
         String path = request.getDecodedPath().substring(1);
         if (path.equals("add_visit")) {
             return addVisit(request);
@@ -30,7 +29,6 @@ public class RxNettyHttpReportServer implements ReportHttpServer {
     }
 
     private <T> Observable<String> addVisit(HttpServerRequest<T> request) {
-        System.out.println(request.toString());
         long id = getLongParam(request, "id");
         Duration visitDuration = getDurationParam(request, "duration");
 
