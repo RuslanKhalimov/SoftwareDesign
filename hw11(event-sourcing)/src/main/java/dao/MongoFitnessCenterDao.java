@@ -68,4 +68,9 @@ public class MongoFitnessCenterDao implements FitnessCenterDao {
                     }
                 });
     }
+
+    @Override
+    public Observable<TurnstileEvent> getEvents() {
+        return events.find().toObservable().map(TurnstileEvent::new);
+    }
 }

@@ -15,7 +15,7 @@ public class TurnstileEvent implements Comparable<TurnstileEvent> {
     public TurnstileEvent(Document document) {
         this(
                 document.getLong("subscriptionId"),
-                EventType.valueOf("eventType"),
+                EventType.valueOf(document.getString("eventType")),
                 fromString(document.getString("eventTimestamp"))
         );
     }
@@ -47,6 +47,10 @@ public class TurnstileEvent implements Comparable<TurnstileEvent> {
 
     @Override
     public int compareTo(TurnstileEvent other) {
+        int idComparision = Long.compare(subscriptionId, other.subscriptionId);
+        if (idComparision != 0) {
+            return idComparision;
+        }
         return eventTimestamp.compareTo(other.eventTimestamp);
     }
 }

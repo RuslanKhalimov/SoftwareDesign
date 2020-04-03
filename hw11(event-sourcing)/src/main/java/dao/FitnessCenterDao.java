@@ -17,4 +17,6 @@ public interface FitnessCenterDao {
     Observable<Success> renewSubscription(long id, LocalDateTime newSubscriptionEnd);
 
     Observable<Success> addEvent(TurnstileEvent event);
+
+    Observable<TurnstileEvent> getEvents();
 }
