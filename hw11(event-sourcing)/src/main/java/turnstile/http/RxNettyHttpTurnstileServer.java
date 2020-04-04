@@ -10,6 +10,7 @@ import rx.Observable;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -28,17 +29,17 @@ public class RxNettyHttpTurnstileServer implements TurnstileHttpServer {
     public <T> Observable<String> getResponse(HttpServerRequest<T> request) {
         String path = request.getDecodedPath().substring(1);
         if (path.equals("enter")) {
-            return enter(request);
+            return enter(request.getQueryParameters());
         }
         if (path.equals("exit")) {
-            return exit(request);
+            return exit(request.getQueryParameters());
         }
         return Observable.just("Unsupported request : " + path);
     }
 
-    private <T> Observable<String> enter(HttpServerRequest<T> request) {
-        long id = getLongParam(request, "id");
-        LocalDateTime timestamp = getLocalDateTimeParam(request, "timestamp");
+    <T> Observable<String> enter(Map<String, List<String>> params) {
+        long id = getLongParam(params, "id");
+        LocalDateTime timestamp = getLocalDateTimeParam(params, "timestamp");
 
         if (subscriptionEnterTime.containsKey(id)) {
             return Observable.just("You already in fitness center");
@@ -54,9 +55,9 @@ public class RxNettyHttpTurnstileServer implements TurnstileHttpServer {
                 });
     }
 
-    private <T> Observable<String> exit(HttpServerRequest<T> request) {
-        long id = getLongParam(request, "id");
-        LocalDateTime timestamp = getLocalDateTimeParam(request, "timestamp");
+    <T> Observable<String> exit(Map<String, List<String>> params) {
+        long id = getLongParam(params, "id");
+        LocalDateTime timestamp = getLocalDateTimeParam(params, "timestamp");
 
         if (!subscriptionEnterTime.containsKey(id)) {
             return Observable.just("You are not in fitness center");

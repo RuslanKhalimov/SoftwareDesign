@@ -5,6 +5,8 @@ import io.reactivex.netty.protocol.http.server.HttpServerRequest;
 import rx.Observable;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static utils.HttpRequestUtils.*;
@@ -20,20 +22,20 @@ public class RxNettyHttpMangerServer implements ManagerHttpServer {
     public <T> Observable<String> getResponse(HttpServerRequest<T> request) {
         String path = request.getDecodedPath().substring(1);
         if (path.equals("create_subscription")) {
-            return createSubscription(request);
+            return createSubscription(request.getQueryParameters());
         }
         if (path.equals("get_subscription")) {
-            return getSubscription(request);
+            return getSubscription(request.getQueryParameters());
         }
         if (path.equals("renew_subscription")) {
-            return renewSubscription(request);
+            return renewSubscription(request.getQueryParameters());
         }
         return Observable.just("Unsupported request : " + path);
     }
 
-    private <T> Observable<String> createSubscription(HttpServerRequest<T> request) {
-        long id = getLongParam(request, "id");
-        LocalDateTime subscriptionEnd = getLocalDateTimeParam(request, "subscription_end");
+    <T> Observable<String> createSubscription(Map<String, List<String>> params) {
+        long id = getLongParam(params, "id");
+        LocalDateTime subscriptionEnd = getLocalDateTimeParam(params, "subscription_end");
 
         return dao
                 .createSubscription(id, subscriptionEnd)
@@ -41,17 +43,17 @@ public class RxNettyHttpMangerServer implements ManagerHttpServer {
                 .onErrorReturn(Throwable::getMessage);
     }
 
-    private <T> Observable<String> getSubscription(HttpServerRequest<T> request) {
-        long id = Long.parseLong(getQueryParam(request, "id"));
+    <T> Observable<String> getSubscription(Map<String, List<String>> params) {
+        long id = Long.parseLong(getQueryParam(params, "id"));
 
         return dao
                 .getLatestVersionSubscription(id)
                 .map(Objects::toString);
     }
 
-    private <T> Observable<String> renewSubscription(HttpServerRequest<T> request) {
-        long id = getLongParam(request, "id");
-        LocalDateTime subscriptionEnd = getLocalDateTimeParam(request, "subscription_end");
+    <T> Observable<String> renewSubscription(Map<String, List<String>> params) {
+        long id = getLongParam(params, "id");
+        LocalDateTime subscriptionEnd = getLocalDateTimeParam(params, "subscription_end");
 
         return dao.renewSubscription(id, subscriptionEnd)
                 .map(Objects::toString)

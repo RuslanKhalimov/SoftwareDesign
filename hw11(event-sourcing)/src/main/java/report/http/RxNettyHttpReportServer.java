@@ -9,6 +9,7 @@ import rx.Observable;
 
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static utils.HttpRequestUtils.*;
@@ -29,10 +30,10 @@ public class RxNettyHttpReportServer implements ReportHttpServer {
                         if (event.getEventType() == EventType.ENTER) {
                             previousEvent = event;
                         } else if (previousEvent != null) {
-                                addVisit(
-                                        event.getSubscriptionId(),
-                                        Duration.between(previousEvent.getEventTimestamp(), event.getEventTimestamp())
-                                );
+                            addVisit(
+                                    event.getSubscriptionId(),
+                                    Duration.between(previousEvent.getEventTimestamp(), event.getEventTimestamp())
+                            );
                         }
                     }
                     return Observable.empty();
@@ -49,28 +50,28 @@ public class RxNettyHttpReportServer implements ReportHttpServer {
     public <T> Observable<String> getResponse(HttpServerRequest<T> request) {
         String path = request.getDecodedPath().substring(1);
         if (path.equals("add_visit")) {
-            return addVisit(request);
+            return addVisit(request.getQueryParameters());
         }
         if (path.equals("get_subscription_report")) {
-            return getSubscriptionReport(request);
+            return getSubscriptionReport(request.getQueryParameters());
         }
         if (path.equals("get_total_report")) {
-            return getTotalReport(request);
+            return getTotalReport(request.getQueryParameters());
         }
         return Observable.just("Unsupported request : " + path);
     }
 
-    private <T> Observable<String> addVisit(HttpServerRequest<T> request) {
-        long id = getLongParam(request, "id");
-        Duration visitDuration = getDurationParam(request, "duration");
+    <T> Observable<String> addVisit(Map<String, List<String>> params) {
+        long id = getLongParam(params, "id");
+        Duration visitDuration = getDurationParam(params, "duration");
 
         addVisit(id, visitDuration);
 
         return Observable.just("Visit added by subscription with id=" + id + " added");
     }
 
-    private <T> Observable<String> getSubscriptionReport(HttpServerRequest<T> request) {
-        long id = getLongParam(request, "id");
+    <T> Observable<String> getSubscriptionReport(Map<String, List<String>> params) {
+        long id = getLongParam(params, "id");
 
         if (reports.containsKey(id)) {
             return Observable.just(reports.get(id).toString());
@@ -79,7 +80,7 @@ public class RxNettyHttpReportServer implements ReportHttpServer {
         }
     }
 
-    private <T> Observable<String> getTotalReport(HttpServerRequest<T> request) {
+    <T> Observable<String> getTotalReport(Map<String, List<String>> params) {
         SubscriptionReport totalReport = new SubscriptionReport();
         for (SubscriptionReport report : reports.values()) {
             totalReport = totalReport.mergeReports(report);
