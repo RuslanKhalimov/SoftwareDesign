@@ -53,4 +53,13 @@ public class TurnstileEvent implements Comparable<TurnstileEvent> {
         }
         return eventTimestamp.compareTo(other.eventTimestamp);
     }
+
+    @Override
+    public String toString() {
+        return "TurnstileEvent {\n" +
+                "  subscriptionId : " + subscriptionId + ",\n" +
+                "  eventType : " + eventType + ",\n" +
+                "  eventTimestamp : " + eventTimestamp.format(FORMATTER) + "\n" +
+                "}";
+    }
 }

@@ -59,7 +59,11 @@ public class MongoFitnessCenterDao implements FitnessCenterDao {
                 .find(Filters.eq("id", event.getSubscriptionId()))
                 .toObservable()
                 .map(Subscription::new)
+                .defaultIfEmpty(null)
                 .flatMap(subscription -> {
+                    if (subscription == null) {
+                        return Observable.error(new IllegalArgumentException("Subscription with id=" + event.getSubscriptionId() + " not exists"));
+                    }
                     if (event.getEventType() == EventType.EXIT ||
                             subscription.getSubscriptionEnd().isAfter(event.getEventTimestamp())) {
                         return events.insertOne(event.toDocument());
